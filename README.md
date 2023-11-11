@@ -24,16 +24,11 @@ Used to define all types of settings using a nice GUI and consume it through a r
 
 ## Step-by-step setup
 
-- Create supabase account and project
-- Create stripe account
+- Create [supabase](https://supabase.com/) account and project
+- Create [stripe](https://stripe.com/) account
 - Rename .env.example to .env and add the values
 - Run supabase/fixtures/schema.sql to create and populate the PostgreSQL tables
 - [Optional] use https://stripe.com/docs/stripe-cli#install to create stripe products
-
-```npm i```
-
-```npm dev```
-
-Use link-project, generate-types, and generate-schema to create and update the types and schema for PostgreSQL database.
+- Use link-project, generate-types, and generate-schema to create and update the types and schema for PostgreSQL database.
 
 
