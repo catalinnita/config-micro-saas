@@ -16,7 +16,7 @@ Used to define all types of settings using a nice GUI and consume it through a r
 
 - https://config-micro-saas.vercel.app/signin
 
-[![Screenshot of demo](https://config-micro-saas.vercel.app/projects.png)
+![Screenshot of demo](https://config-micro-saas.vercel.app/projects.png)
 
 ## Architecture
 
