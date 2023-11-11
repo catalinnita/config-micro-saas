@@ -5,7 +5,7 @@ Used to define all types of settings using a nice GUI and consume it through a r
 ## Features
 
 - Uses https://github.com/vercel/nextjs-subscription-payments for authentication and stripe integration
-- In addition offers:
+- In addition this project offers:
   - GraphQL config and Apollo Client for querying and mutating all collections
   - Teams management and RLS build in PostgreSQL based on TeamId
   - Support for multiple projects
