@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation"
 import { DeleteIcon } from "../DeleteIcon/deleteIcon"
-import { EditableField } from "../EditableField/editableField"
+import { EditableField } from "../EditableField"
 import { Box, Flex, IconButton } from "@chakra-ui/react"
 import Link from "next/link"
 
