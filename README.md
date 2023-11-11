@@ -14,13 +14,13 @@ Used to define all types of settings using a nice GUI and consume it through a r
 
 ## Demo
 
-- ...
+https://config-micro-saas.vercel.app/signin
 
-[![Screenshot of demo](...)
+[![Screenshot of demo](https://config-micro-saas.vercel.app/projects.png)
 
 ## Architecture
 
-![Architecture diagram]()
+...
 
 ## Step-by-step setup
 
