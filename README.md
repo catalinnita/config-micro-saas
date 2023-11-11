@@ -31,6 +31,7 @@ Used to define all types of settings using a nice GUI and consume it through a r
 - [Optional] use https://stripe.com/docs/stripe-cli#install to create stripe products
 
 ```npm i```
+
 ```npm dev```
 
 Use link-project, generate-types, and generate-schema to create and update the types and schema for PostgreSQL database.
