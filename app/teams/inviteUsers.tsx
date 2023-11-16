@@ -38,6 +38,7 @@ export function InviteUsers({
                 value={value} 
             />
             <Button
+                colorScheme="purple"
                 onClick={() => {
                     sendInvite()
                 }}

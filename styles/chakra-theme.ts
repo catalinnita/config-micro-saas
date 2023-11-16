@@ -415,6 +415,7 @@ export const chakraTheme = {
       "8xl": "90rem",
       "prose": "60ch",
       "container": {
+        "xs": "480px",
         "sm": "640px",
         "md": "768px",
         "lg": "1024px",

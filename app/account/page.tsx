@@ -136,6 +136,7 @@ export default async function Account() {
             py={2}
           >64 characters maximum</Box>
           <Button
+            colorScheme="purple"
             size="sm"
             type="submit"
             form="nameForm"
@@ -187,6 +188,7 @@ export default async function Account() {
             py={2}
           >We will email you to verify the change.</Box>
           <Button
+            colorScheme="purple"
             size="sm"
             type="submit"
             form="emailForm"

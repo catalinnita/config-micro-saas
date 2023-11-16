@@ -25,6 +25,7 @@ export default function ManageSubscriptionButton({ session }: Props) {
 
   return (
       <Button
+        colorScheme="purple"
         ml={2}
         size="sm"
         disabled={!session}

@@ -2,7 +2,6 @@ import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
-   
   if (req.method === 'POST') {
     try {
       const { name } = await req.json()
@@ -20,6 +19,8 @@ export async function POST(req: Request) {
         .from('projects')
         .select('*')
         .eq('name', name);
+        
+        console.log({res})
 
         return NextResponse.json({ res })
       } catch (err: any) {

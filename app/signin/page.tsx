@@ -2,6 +2,7 @@ import { getSession } from '@/data/supabase-server';
 import AuthUI from './AuthUI';
 
 import { redirect } from 'next/navigation';
+import { Box, Container, Flex } from '@chakra-ui/react';
 
 export default async function SignIn() {
   const session = await getSession();
@@ -11,13 +12,20 @@ export default async function SignIn() {
   }
 
   return (
-    <div className="flex justify-center height-screen-helper">
-      <div className="flex flex-col justify-between max-w-lg p-3 m-auto w-80 ">
-        <div className="flex justify-center pb-12 ">
-          Logo
-        </div>
-        <AuthUI />
-      </div>
-    </div>
+      <Container
+        maxW="container.xs"
+        display="flex"
+        flexDirection="column"
+        justifyContent="space-around"
+        alignItems="center"
+        h="100vh"
+      >
+        <Box width="100%">
+          <Flex justifyContent="space-around">
+            L
+          </Flex>
+          <AuthUI />
+        </Box>
+      </Container>
   );
 }

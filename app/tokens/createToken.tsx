@@ -9,6 +9,7 @@ export function CreateToken({
 }: CreateTokenProps) {
     return (
         <Button
+            colorScheme="purple"
             onClick={() => {
                 createTokenCallback()
             }}
