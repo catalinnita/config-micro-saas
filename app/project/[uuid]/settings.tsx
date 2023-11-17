@@ -114,6 +114,10 @@ export function Settings({
         projectUuid,
     })
 
+    console.log({
+        settings
+    })
+
     return (
         <TableContainer 
             bg="white"

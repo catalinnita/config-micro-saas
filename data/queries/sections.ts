@@ -6,7 +6,7 @@ export const sectionsQuery = gql`
         filter: $filter,
         first: 100, 
         orderBy: [{
-            updated_at: DescNullsLast
+          updated_at: AscNullsLast
         }]) {
         pageInfo {
             startCursor

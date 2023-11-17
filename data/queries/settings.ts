@@ -6,7 +6,7 @@ export const settingsQuery = gql`
         filter: $filter,
         first: 100, 
         orderBy: [{
-            created_at: DescNullsLast
+          updated_at: AscNullsLast
         }]) {
         pageInfo {
             startCursor

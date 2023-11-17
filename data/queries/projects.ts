@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 
 export const projectsQuery = gql`
   query projects($filter: projectsFilter) {
-    projectsCollection(
+    projectsCollection (
       filter: $filter,
       first: 100, 
       orderBy: [{
@@ -23,7 +23,10 @@ export const projectsQuery = gql`
           updated_at
           color
           status
-          sectionsCollection {
+          sectionsCollection (
+            orderBy: [{
+              updated_at: AscNullsLast
+            }]) {
             edges {
               node {
                 uuid
@@ -32,7 +35,10 @@ export const projectsQuery = gql`
                 created_at
                 updated_at
                 status
-                settingsCollection {
+                settingsCollection (
+                  orderBy: [{
+                    updated_at: AscNullsLast
+                  }]) {
                   edges {
                     node {
                       uuid

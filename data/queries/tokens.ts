@@ -5,7 +5,9 @@ export const tokensQuery = gql`
         tokensCollection (
             filter: $filter,
             first: 100, 
-        ) {
+            orderBy: [{
+                created_at: AscNullsLast
+            }]) {
             pageInfo {
                 startCursor
                 endCursor

@@ -5,7 +5,9 @@ export const teamsUsersQuery = gql`
         teams_usersCollection (
             filter: $filter,
             first: 100, 
-        ) {
+            orderBy: [{
+                created_at: AscNullsLast
+            }]) {
             pageInfo {
                 startCursor
                 endCursor
