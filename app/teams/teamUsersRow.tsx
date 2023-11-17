@@ -3,7 +3,7 @@
 import { DeleteIcon } from "@/components/DeleteIcon/deleteIcon"
 import { Role } from "./role"
 import { Label } from "@/components/Label"
-import { Td, Tr } from "@chakra-ui/react"
+import { Button, Td, Tr } from "@chakra-ui/react"
 
 type UsersRowProps = {
     user_uuid: string,
@@ -26,10 +26,16 @@ export function UsersRow({
 }: UsersRowProps) {
     return (
         <Tr>
-            <Td p={3}>
+            <Td 
+                width="60"
+                p={3}
+            >
                 {name}
             </Td>
-            <Td  p={3}>
+            <Td  
+                width="5"
+                p={3}
+            >
                 {updateUsersCallback ? 
                     <Role
                         initialRole={role}
@@ -38,12 +44,20 @@ export function UsersRow({
                     <Label>{role}</Label>
                 }
             </Td>
-            {deleteUserCallback ? 
-                // TO DO: check if the user should be able to detete other users
-                <Td  p={3} onClick={() => { 
-                    deleteUserCallback()
-                }}><DeleteIcon /></Td>:
-                <Td></Td>
+            <Td></Td>
+            {deleteUserCallback && 
+                <Td width="1" py={0} px={2}>
+                    <Button 
+                        onClick={() => { deleteUserCallback() }}
+                        variant="text" 
+                        p={3} 
+                        h="auto"
+                        cursor="pointer"
+                        _hover={{
+                            opacity: "0.6"
+                        }}
+                    ><DeleteIcon /></Button>
+                </Td>    
             }
         </Tr>
     )

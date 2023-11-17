@@ -34,7 +34,11 @@ export function SettingsRow({
 }: SettingsRowProps) {
     return (
         <Tr>
-            <Td p={3}>
+            <Td 
+                width="60"
+                p={3}
+                wordBreak="break-all"
+            >
                 <EditableField editCallback={(fieldValue: string) => {
                     updateSettingsCallback({
                         uuid: settingsUuid,
@@ -45,7 +49,10 @@ export function SettingsRow({
                 }}>{name}</EditableField>
             </Td>
 
-            <Td p={3}>
+            <Td 
+                width="5"
+                p={3}
+            >
                 <Status
                     updateCallback={({statusValue}) => {
                         updateSettingsCallback({
@@ -60,12 +67,13 @@ export function SettingsRow({
             </Td>
             
             <Td 
+                width="5"
                 p={3} 
                 fontSize="sm"
                 fontWeight="medium"
             >{type}</Td>
             
-            <Td p={3}>
+            <Td p={3} wordBreak="break-all">
                 <EditableField editCallback={(fieldValue: string) => {
                     updateSettingsCallback({
                         uuid: settingsUuid,
@@ -76,7 +84,18 @@ export function SettingsRow({
                 }}>{value}</EditableField>
             </Td>
             
-            <Td p={3} onClick={() => { deleteSettingsCallback() }}><DeleteIcon /></Td>
+            <Td width="1" py={0} px={2}>
+                <Button 
+                    onClick={() => { deleteSettingsCallback() }}
+                    variant="text" 
+                    p={3} 
+                    h="auto"
+                    cursor="pointer"
+                    _hover={{
+                        opacity: "0.6"
+                    }}
+                ><DeleteIcon /></Button>
+            </Td>
         </Tr>
     )
 }

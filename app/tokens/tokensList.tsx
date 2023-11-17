@@ -3,7 +3,7 @@
 import { DeleteIcon } from "@/components/DeleteIcon/deleteIcon"
 import { CreateToken } from "./createToken"
 import { useTokens } from "./useTokens"
-import { Box, Table, TableContainer, Tbody, Td, Tr } from "@chakra-ui/react"
+import { Box, Button, Table, TableContainer, Tbody, Td, Tr } from "@chakra-ui/react"
 
 type TokensListProps = {
     initialTokens: any[],
@@ -30,9 +30,18 @@ export function TokensList({
                 {tokens?.map((token: any) => 
                     <Tr>
                         <Td p={3}>{token.node.token}</Td>
-                        <Td p={3} onClick={() => { 
-                            deleteToken({ uuid: token.node.uuid })
-                        }}><DeleteIcon /></Td>
+                        <Td width="1" py={0} px={2}>
+                            <Button 
+                                onClick={() => { deleteToken({ uuid: token.node.uuid }) }}
+                                variant="text" 
+                                p={3} 
+                                h="auto"
+                                cursor="pointer"
+                                _hover={{
+                                    opacity: "0.6"
+                                }}
+                            ><DeleteIcon /></Button>
+                        </Td>
                     </Tr>
                 )}
                 </Tbody>
