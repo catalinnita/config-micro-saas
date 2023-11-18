@@ -7,7 +7,6 @@ import { deleteSectionMutation } from "@/data/queries/deleteSection";
 import { deleteSettingsMutation } from "@/data/queries/deleteSettings";
 import { projectsQuery } from "@/data/queries/projects";
 import { updateProjectMutation } from "@/data/queries/updateProject";
-import { useUser } from "@/providers/user-provider";
 import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import { useState } from "react";
 

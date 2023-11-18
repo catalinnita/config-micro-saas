@@ -21,6 +21,10 @@ export function TeamUsers({
         teamUuid
     })
 
+    console.log({
+        userTeams
+    });
+
     return (
         <TableContainer 
             bg="white"
@@ -36,12 +40,12 @@ export function TeamUsers({
                         avatar={user.node.users.avatar_url}
                         role={user.node.role}
                         status={user.node.status}
-                        deleteUserCallback={userTeams?.role === 'admin' ? () => { 
+                        deleteUserCallback={userTeams?.role === 'admin' && userTeams.user_uuid !== user.node.user_uuid  ? () => { 
                             deleteTeamsUsers({
                                 users_uuid: user.node.user_uuid
                             })
                         }: undefined}
-                        updateUsersCallback={userTeams?.role === 'admin' ? ({roleValue}) => {
+                        updateUsersCallback={userTeams?.role === 'admin' && userTeams.user_uuid !== user.node.user_uuid ? ({roleValue}) => {
                             updateTeamsUsers({
                                 users_uuid: user.node.user_uuid,
                                 fields: {
