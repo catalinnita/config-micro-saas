@@ -51,6 +51,7 @@ export async function getUser() {
       data: { session }
     } = await supabase.auth.getSession();
      if (session) {
+      
       const { data: userDetails } = await supabase
         .from('users')
         .select('*')

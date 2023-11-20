@@ -1,26 +1,34 @@
-import {
-    getUser,
-  } from '@/data/supabase-server';
-import { redirect } from 'next/navigation';
-import { Tokens } from './tokens';
+import { getUser } from '@/data/supabase-server';
 import { AdminWrapper } from '@/components/AdminWrapper';
+import { getTokensById } from '@/data/apollo-server';
+import { GridWrapper } from '@/components/GridWrapper';
+import { TokensList } from './tokensList';
+import { Page } from '@/types/page';
 
-  export default async function TokensPage() {
-    const { session, userDetails, userTeams } = await getUser();
-
-    // check if user is signed-in
-    if (!session) {
-      return redirect('/signin');
+async function TokensPage({
+  params
+}: { params: Page }) {
+    const { userTeams } = params
+    
+    if (!userTeams?.teams_uuid) {
+        return <></>
     }
 
-    // TODO: check if user has rights to see the page
-    
+    const tokens = await getTokensById({
+        teams_uuid: userTeams?.teams_uuid
+    })
+    const rowsCount = tokens?.length
+
     return (
-      <AdminWrapper>
-        {userTeams?.teams_uuid && <Tokens 
-          teams_uuid={userTeams?.teams_uuid}
-        />}
-      </AdminWrapper>
+      <GridWrapper rows={rowsCount}>
+          <div></div>
+          <TokensList 
+              initialTokens={tokens}
+              teams_uuid={userTeams?.teams_uuid}
+          />
+      </GridWrapper>
     )
   
-  }
+}
+
+export default AdminWrapper(TokensPage)

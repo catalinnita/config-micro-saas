@@ -1,32 +1,16 @@
-import {
-  getSession,
-  getUserDetails,
-  getSubscription,
-} from '@/data/supabase-server';
-import { redirect } from 'next/navigation';
-import { Projects } from './projects';
-import { Search } from './search';
-import { getProjects } from '@/data/apollo-server';
 import { AdminWrapper } from '@/components/AdminWrapper';
+import { getProjects } from "@/data/apollo-server";
+import { Projects } from "./projects"
 
-export default async function Dashboard() {
-  const [session, userDetails, subscription] = await Promise.all([
-    getSession(),
-    getUserDetails(),
-    getSubscription()
-  ]);
-
-  if (!session) {
-    return redirect('/signin');
-  }
-
-  const projects = await getProjects();
+async function DashboardPage() {
+  const initialProjects = await getProjects();
 
   return (
-    <AdminWrapper>
-      {/* <Search /> */}
-      <Projects initialProjects={projects} />
-    </AdminWrapper>
+      <>
+        {/* <Search /> */}
+        <Projects initialProjects={initialProjects} />
+      </>
   )
-
 }
+
+export default AdminWrapper(DashboardPage)

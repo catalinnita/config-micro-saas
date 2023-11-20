@@ -1,30 +1,19 @@
 import ManageSubscriptionButton from './ManageSubscriptionButton';
 import {
   getSession,
-  getSubscription,
-  getUser
 } from '@/data/supabase-server';
 import { Database } from '@/types/db';
 import { createServerActionClient } from '@supabase/auth-helpers-nextjs';
 import { revalidatePath } from 'next/cache';
 import { cookies } from 'next/headers';
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
 import { AdminWrapper } from '@/components/AdminWrapper';
 import { Box, Heading, Button, Flex, Input } from '@chakra-ui/react';
+import { Page } from '@/types/page';
 
-export default async function Account() {
-  const [{ session, userDetails }, subscription] = await Promise.all([
-    getUser(),
-    getSubscription()
-  ]);
-
-  const user = session?.user;
-
-  if (!session) {
-    return redirect('/signin');
-  }
-
+// TO DO: to split in pieces
+async function AccountPage({ params }: { params: Page }) {
+  const { session, userDetails, subscription } = params
   const subscriptionPrice =
     subscription &&
     new Intl.NumberFormat('en-US', {
@@ -63,8 +52,7 @@ export default async function Account() {
   };
 
   return (
-    <AdminWrapper>
-      
+    <>
       <Heading
         fontFamily="system-ui, helvetica"
          fontSize="3xl"
@@ -174,7 +162,7 @@ export default async function Account() {
               type="text"
               name="email"
               className="w-1/2 p-3 rounded-md bg-zinc-800"
-              defaultValue={user ? user.email : ''}
+              defaultValue={session.user ? session.user.email : ''}
               placeholder="Your email"
               maxLength={64}
             />
@@ -195,7 +183,9 @@ export default async function Account() {
           >
             Update Email
           </Button>
-      </Flex>        
-    </AdminWrapper>
+      </Flex>     
+    </>   
   );
 }
+
+export default AdminWrapper(AccountPage)

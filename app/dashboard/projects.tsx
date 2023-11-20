@@ -37,7 +37,6 @@ export function Projects({
         columns(3),
         columns(4),
     ]
-
     return (
         <Grid 
             maxW="container.xl" 

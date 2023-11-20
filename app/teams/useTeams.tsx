@@ -1,7 +1,9 @@
 import { deleteTeamsUserMutation } from "@/data/queries/deleteTeamsUser";
 import { teamsUsersQuery } from "@/data/queries/teamsUsers";
 import { updateTeamsUserMutation } from "@/data/queries/updateTeamsUser";
+import { createServerSupabaseClient, getUserDetails } from "@/data/supabase-server";
 import { useLazyQuery, useMutation } from "@apollo/client";
+import { createClient } from "@supabase/supabase-js";
 import { useState } from "react";
 
 type useTeamsProps = {

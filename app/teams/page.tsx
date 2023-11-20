@@ -1,28 +1,44 @@
-import {
-    getUser,
-  } from '@/data/supabase-server';
-  import { redirect } from 'next/navigation';
-import { Team } from './team';
 import { AdminWrapper } from '@/components/AdminWrapper';
+import { Page } from "@/types/page";
+import { GridWrapper } from "@/components/GridWrapper";
+import { TeamInfo } from "./teamInfo";
+import { TeamUsers } from "./teamUsers";
+import { getTeamById, getUsersByTeamId } from "@/data/apollo-server";
 
-  export default async function TeamsPage() {
-    const { session, userDetails, userTeams } = await getUser();
+async function TeamsPage({
+    params
+}: { params: Page }) {
+    const { userTeams } = params;
+    const { teams_uuid } = userTeams
 
-    // check if user is signed-in
-    if (!session) {
-      return redirect('/signin');
+    if (!teams_uuid) {
+        return <></>
     }
 
-    // TODO: check if user has rights to see the page
-    
+    const [teamInfo, users] = await Promise.all([
+        getTeamById({
+            id: teams_uuid
+        }),
+        getUsersByTeamId({
+            id: teams_uuid
+        }),
+    ])
+
     return (
-      <AdminWrapper>
-          {userTeams?.teams_uuid && 
-            <Team 
-              teams_uuid={userTeams?.teams_uuid}
+        <GridWrapper rows={2}>
+            <div></div>
+            <TeamInfo 
+                teams_uuid={teamInfo.data.teamsCollection.edges[0].node.uuid}
+                name={teamInfo.data.teamsCollection.edges[0].node.name}
+                description={teamInfo.data.teamsCollection.edges[0].node.description}
             />
-          }
-      </AdminWrapper>
+            <div></div>
+            <TeamUsers 
+                teamUuid={teams_uuid}
+                users={users.data.teams_usersCollection.edges}
+            />
+        </GridWrapper>
     )
-  
-  }
+}
+
+export default AdminWrapper(TeamsPage)
