@@ -12,6 +12,7 @@ type ProjectPageProps = {
 }
 
 async function ProjectPage({ params }: ProjectPageProps) {
+    console.log({params})
     const { uuid } = params;
     const project = await getProjectById({
       id: uuid,

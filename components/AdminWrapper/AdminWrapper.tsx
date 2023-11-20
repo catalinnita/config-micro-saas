@@ -10,7 +10,7 @@ export function AdminWrapper<T extends { params: Page }>(
 ) {
     return async (props: T): Promise<JSX.Element> => {
         const { session, userDetails, userTeams } = await getUser();
-
+        console.log({props})
         if (!session) {
             return redirect('/signin');
         }
@@ -20,7 +20,16 @@ export function AdminWrapper<T extends { params: Page }>(
         }
 
         const subscription = await getSubscription()
-
+        props = {
+            ...props,
+            params: {
+                ...props.params,
+                session,
+                userDetails,
+                userTeams,
+                subscription
+            }
+        }
         return (
             <Container 
                 p={0}
@@ -32,10 +41,6 @@ export function AdminWrapper<T extends { params: Page }>(
                 <Container maxW="container.xl">
                     <Page 
                         {...props} 
-                        session={session}
-                        userDetails={userDetails}
-                        userTeams={userTeams}
-                        subscription={subscription}
                     />
                 </Container>
             </Container>

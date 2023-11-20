@@ -8,13 +8,14 @@ import { getTeamById, getUsersByTeamId } from "@/data/apollo-server";
 async function TeamsPage({
     params
 }: { params: Page }) {
-    const { userTeams } = params;
-    const { teams_uuid } = userTeams
+  console.log({params})  
+  const { userTeams } = params;
+  const { teams_uuid } = userTeams
 
     if (!teams_uuid) {
         return <></>
     }
-
+    
     const [teamInfo, users] = await Promise.all([
         getTeamById({
             id: teams_uuid
