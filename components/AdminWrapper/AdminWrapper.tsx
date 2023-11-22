@@ -10,14 +10,16 @@ export function AdminWrapper<T extends { params: Page }>(
 ) {
     return async (props: T): Promise<JSX.Element> => {
         const { session, userDetails, userTeams } = await getUser();
-        console.log({props})
+
+        console.log(props.params)
+
         if (!session) {
             return redirect('/signin');
         }
-
-        if (!userDetails?.full_name) {
-            return redirect('/welcome')
-        }
+        
+        // if (!userDetails?.full_name) {
+        //     return redirect('/welcome')
+        // }
 
         const subscription = await getSubscription()
         props = {
