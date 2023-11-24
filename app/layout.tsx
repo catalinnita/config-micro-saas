@@ -1,6 +1,6 @@
-import { PropsWithChildren } from 'react';
 import { SupabaseProvider, ApolloProvider, ChakraProviderWithTheme } from '@/providers';
 import { UserProvider } from '@/providers/user-provider';
+import { LayoutProps } from '@/.next/types/app/layout';
 
 // i donno what this does but fixes the problem
 export const dynamic = 'force-dynamic'
@@ -43,9 +43,8 @@ export const metadata = {
 export default function RootLayout({
   // Layouts must accept a children prop.
   // This will be populated with nested layouts or pages
-  children
-}: PropsWithChildren) {
-
+  children,
+}: LayoutProps) {
   return (
     <html lang="en">
       <body>

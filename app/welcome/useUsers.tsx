@@ -9,7 +9,7 @@ type userIdProps = {
 export function useUsers({
     userId
 }: userIdProps) {
-    const [ updateUsers ] = useMutation(updateUserMutation)
+    const [ updateUsers, { data, loading, error } ] = useMutation(updateUserMutation)
 
     const modifyUsers = ({ 
         fields,
@@ -18,8 +18,8 @@ export function useUsers({
     }) => {
         updateUsers({
             variables: {
-                teams_usersUpdateInput: fields,
-                teams_usersFilter: {
+                usersUpdateInput: fields,
+                usersFilter: {
                     id: {eq: userId},
                 }
             }
@@ -30,5 +30,8 @@ export function useUsers({
 
     return {
         updateUsers: modifyUsers,
+        data,
+        loading,
+        error,
     }
 }

@@ -1,24 +1,38 @@
 'use client'
 
 import { Button, FormControl, FormHelperText, FormLabel, Input } from "@chakra-ui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useUsers } from "./useUsers";
+import { redirect } from "next/navigation";
 
-export function NameForm() {
-    // const { updateUsers } = useUsers();
+type NameFormProps = {
+    userId: string
+}
+
+export function NameForm({
+    userId
+}: NameFormProps) {
+    const { updateUsers, data, error } = useUsers({ userId });
     const [nameValue, setNameValue] = useState('')
     const disabledButton = nameValue.length < 3
     
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setNameValue(e.target.value)
     }
+
     const handleNameUpdate = () => {
-        // updateUsers({
-        //     fields: {
-        //         name: nameValue
-        //     }
-        // })
+        updateUsers({
+            fields: {
+                full_name: nameValue
+            }
+        })
     }
+
+    useEffect(() => {
+        if (data?.updateusersCollection?.records[0]?.id === userId && !error) {
+            return redirect('/dashboard')
+        }
+    }, [data, error])
     
     return (
         <FormControl>

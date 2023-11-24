@@ -1,12 +1,21 @@
 import { Container, Flex } from "@chakra-ui/react";
 
 import { Page } from "@/types/page";
-import { AdminWrapper } from "@/components/AdminWrapper";
 import { NameForm } from "./nameForm";
+import { getUser } from "@/data/supabase-server";
+import { redirect } from "next/navigation";
 
-function WelcomePage({
-    params
-}: { params: Page }) {
+async function WelcomePage() {
+    const { session, userDetails } = await getUser();
+
+    if (!session) {
+        return redirect('/signin')
+    }
+
+    if (userDetails?.full_name) {
+        return redirect('/dashboard')
+    }
+
     return (
         <Flex
             alignItems="center"
@@ -15,10 +24,12 @@ function WelcomePage({
             <Container
                 maxW="container.xs"
             >
-                <NameForm />
+                <NameForm 
+                    userId={session.user.id}
+                />
             </Container>
         </Flex>
     )
 }
 
-export default AdminWrapper(WelcomePage)
+export default WelcomePage
