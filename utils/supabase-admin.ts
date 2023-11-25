@@ -56,25 +56,41 @@ const createOrRetrieveCustomer = async ({
   email: string;
   uuid: string;
 }) => {
+  
   const { data, error } = await supabaseAdmin
     .from('customers')
     .select('stripe_customer_id')
     .eq('id', uuid)
     .single();
+  
+    const { data: userTeams } = await supabaseAdmin
+    .from('teams_users')
+    .select('*')
+    .eq('user_uuid', uuid)
+    .single()
+
   if (error || !data?.stripe_customer_id) {
+
     // No customer record found, let's create one.
-    const customerData: { metadata: { supabaseUUID: string }; email?: string } =
-      {
-        metadata: {
-          supabaseUUID: uuid
-        }
-      };
+    const customerData: { metadata: { supabaseUUID: string }; email?: string } = {
+      metadata: {
+        supabaseUUID: uuid
+      }
+    };
+
     if (email) customerData.email = email;
+    
     const customer = await stripe.customers.create(customerData);
+    
     // Now insert the customer ID into our Supabase mapping table.
     const { error: supabaseError } = await supabaseAdmin
       .from('customers')
-      .insert([{ id: uuid, stripe_customer_id: customer.id }]);
+      .insert([{ 
+        id: uuid, 
+        teams_uuid: userTeams?.teams_uuid,
+        stripe_customer_id: customer.id 
+      }]);
+
     if (supabaseError) throw supabaseError;
     console.log(`New customer created and inserted for ${uuid}.`);
     return customer.id;
@@ -113,13 +129,13 @@ const manageSubscriptionStatusChange = async (
   // Get customer's UUID from mapping table.
   const { data: customerData, error: noCustomerError } = await supabaseAdmin
     .from('customers')
-    .select('id')
+    .select('id,teams_uuid')
     .eq('stripe_customer_id', customerId)
     .single();
   if (noCustomerError) throw noCustomerError;
 
-  const { id: uuid } = customerData!;
-
+  const { id: uuid, teams_uuid } = customerData!;
+  console.log({ teams_uuid })
   const subscription = await stripe.subscriptions.retrieve(subscriptionId, {
     expand: ['default_payment_method']
   });
@@ -156,7 +172,8 @@ const manageSubscriptionStatusChange = async (
         : null,
       trial_end: subscription.trial_end
         ? toDateTime(subscription.trial_end).toISOString()
-        : null
+        : null,
+      teams_uuid,
     };
 
   const { error } = await supabaseAdmin
@@ -164,7 +181,7 @@ const manageSubscriptionStatusChange = async (
     .upsert([subscriptionData]);
   if (error) throw error;
   console.log(
-    `Inserted/updated subscription [${subscription.id}] for user [${uuid}]`
+    `Inserted/updated subscription [${subscription.id}] for user [${uuid}] and team_uuid [${teams_uuid}]`
   );
 
   // For a new subscription copy the billing details to the customer object.

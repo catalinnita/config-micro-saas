@@ -2,15 +2,17 @@ import Pricing from '@/components/Pricing/Pricing';
 import {
   getSession,
   getSubscription,
-  getActiveProductsWithPrices
+  getActiveProductsWithPrices,
+  getUser
 } from '@/data/supabase-server';
 
 export default async function PricingPage() {
-  const [session, products, subscription] = await Promise.all([
-    getSession(),
-    getActiveProductsWithPrices(),
-    getSubscription()
-  ]);
+  const { session, userTeams } = await getUser();
+  const products = await getActiveProductsWithPrices();
+
+  const subscription = await getSubscription({
+      teams_uuid: userTeams?.teams_uuid || ''
+  })
 
   return (
     <Pricing

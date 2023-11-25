@@ -91,6 +91,7 @@ export async function getUserTeams(user_uuid: string) {
       .from('teams_users')
       .select('*')
       .eq('user_uuid', user_uuid)
+      .single()
 
     return userTeams;
   } catch (error) {
@@ -99,13 +100,16 @@ export async function getUserTeams(user_uuid: string) {
   }
 }
 
-export async function getSubscription() {
+export async function getSubscription({
+  teams_uuid
+}: {teams_uuid: string}) {
   const supabase = createServerSupabaseClient();
   try {
     const { data: subscription } = await supabase
       .from('subscriptions')
       .select('*, prices(*, products(*))')
       .in('status', ['trialing', 'active'])
+      .eq('teams_uuid', teams_uuid)
       .maybeSingle()
       .throwOnError();
 

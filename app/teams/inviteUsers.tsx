@@ -10,7 +10,6 @@ type InviteUsersProps = {
 export function InviteUsers({
     teamUuid
 }: InviteUsersProps) {
-    const { supabase } = useSupabase()
     const [value, setValue] = useState('')
 
     const sendInvite = async () => {
@@ -21,6 +20,7 @@ export function InviteUsers({
             url: '/api/send-invitation',
             data: {
                 email: value,
+                teamUuid,
             }
         })
     }

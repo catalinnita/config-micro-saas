@@ -60,17 +60,16 @@ ALTER TYPE "public"."subscription_status" OWNER TO "postgres";
 
 CREATE OR REPLACE FUNCTION "public"."handle_new_public_user"() RETURNS "trigger"
     LANGUAGE "plpgsql"
-    AS $$declare
-  auth_teams_uuid uuid;
+    AS $$-- declare
 
 begin
-  select teams_uuid into auth_teams_uuid
-    from teams_users 
-      where user_uuid = auth.uid();
+  -- select teams_uuid into auth_teams_uuid
+  --   from teams_users 
+  --     where user_uuid = auth.uid();
 
-  insert into teams_users
-    (user_uuid, teams_uuid, role) values
-    (new.id, auth_teams_uuid, 'member');
+  -- insert into teams_users
+  --   (user_uuid, teams_uuid, role) values
+  --   (new.id, auth_teams_uuid, 'member');
 
 end;$$;
 
@@ -143,7 +142,8 @@ SET default_table_access_method = "heap";
 
 CREATE TABLE IF NOT EXISTS "public"."customers" (
     "id" "uuid" NOT NULL,
-    "stripe_customer_id" "text"
+    "stripe_customer_id" "text",
+    "teams_uuid" "uuid"
 );
 
 ALTER TABLE "public"."customers" OWNER TO "postgres";
@@ -178,13 +178,14 @@ ALTER TABLE "public"."products" OWNER TO "postgres";
 
 CREATE TABLE IF NOT EXISTS "public"."projects" (
     "created_at" timestamp with time zone DEFAULT "now"() NOT NULL,
-    "name" character varying,
+    "name" "text",
     "description" "text",
     "color" character varying,
     "updated_at" timestamp with time zone DEFAULT "now"(),
     "status" character varying DEFAULT 'draft'::character varying,
     "uuid" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
-    "teams_uuid" "uuid"
+    "teams_uuid" "uuid",
+    CONSTRAINT "projects_created_at_check" CHECK (("created_at" <> NULL::timestamp with time zone))
 );
 
 ALTER TABLE "public"."projects" OWNER TO "postgres";
@@ -251,7 +252,8 @@ CREATE TABLE IF NOT EXISTS "public"."teams_users" (
     "uuid" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
     "teams_uuid" "uuid",
     "user_uuid" "uuid",
-    "role" character varying
+    "role" character varying,
+    "created_at" timestamp with time zone DEFAULT "now"() NOT NULL
 );
 
 ALTER TABLE "public"."teams_users" OWNER TO "postgres";
@@ -306,12 +308,20 @@ ALTER TABLE ONLY "public"."tokens"
     ADD CONSTRAINT "tokens_pkey" PRIMARY KEY ("uuid");
 
 ALTER TABLE ONLY "public"."users"
+    ADD CONSTRAINT "users_id_key" UNIQUE ("id");
+
+ALTER TABLE ONLY "public"."users"
     ADD CONSTRAINT "users_pkey" PRIMARY KEY ("id");
 
 CREATE OR REPLACE TRIGGER "new_public_user" AFTER INSERT ON "public"."users" FOR EACH ROW EXECUTE FUNCTION "public"."handle_new_public_user"();
 
+ALTER TABLE "public"."users" DISABLE TRIGGER "new_public_user";
+
 ALTER TABLE ONLY "public"."customers"
     ADD CONSTRAINT "customers_id_fkey" FOREIGN KEY ("id") REFERENCES "auth"."users"("id");
+
+ALTER TABLE ONLY "public"."customers"
+    ADD CONSTRAINT "customers_teams_uuid_fkey" FOREIGN KEY ("teams_uuid") REFERENCES "public"."teams"("uuid");
 
 ALTER TABLE ONLY "public"."prices"
     ADD CONSTRAINT "prices_product_id_fkey" FOREIGN KEY ("product_id") REFERENCES "public"."products"("id");
@@ -408,8 +418,6 @@ ALTER TABLE "public"."sections" ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "select users from same team based on teams_uuid" ON "public"."teams_users" FOR SELECT USING (true);
 
 ALTER TABLE "public"."settings" ENABLE ROW LEVEL SECURITY;
-
-ALTER TABLE "public"."subscriptions" ENABLE ROW LEVEL SECURITY;
 
 ALTER TABLE "public"."teams" ENABLE ROW LEVEL SECURITY;
 

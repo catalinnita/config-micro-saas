@@ -13,21 +13,32 @@ export interface Database {
         Row: {
           id: string
           stripe_customer_id: string | null
+          teams_uuid: string | null
         }
         Insert: {
           id: string
           stripe_customer_id?: string | null
+          teams_uuid?: string | null
         }
         Update: {
           id?: string
           stripe_customer_id?: string | null
+          teams_uuid?: string | null
         }
         Relationships: [
           {
             foreignKeyName: "customers_id_fkey"
             columns: ["id"]
+            isOneToOne: true
             referencedRelation: "users"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "customers_teams_uuid_fkey"
+            columns: ["teams_uuid"]
+            isOneToOne: false
+            referencedRelation: "teams"
+            referencedColumns: ["uuid"]
           }
         ]
       }
@@ -75,6 +86,7 @@ export interface Database {
           {
             foreignKeyName: "prices_product_id_fkey"
             columns: ["product_id"]
+            isOneToOne: false
             referencedRelation: "products"
             referencedColumns: ["id"]
           }
@@ -142,6 +154,7 @@ export interface Database {
           {
             foreignKeyName: "projects_teams_uuid_fkey"
             columns: ["teams_uuid"]
+            isOneToOne: false
             referencedRelation: "teams"
             referencedColumns: ["uuid"]
           }
@@ -182,12 +195,14 @@ export interface Database {
           {
             foreignKeyName: "sections_projects_uuid_fkey"
             columns: ["projects_uuid"]
+            isOneToOne: false
             referencedRelation: "projects"
             referencedColumns: ["uuid"]
           },
           {
             foreignKeyName: "sections_teams_uuid_fkey"
             columns: ["teams_uuid"]
+            isOneToOne: false
             referencedRelation: "teams"
             referencedColumns: ["uuid"]
           }
@@ -234,18 +249,21 @@ export interface Database {
           {
             foreignKeyName: "settings_projects_uuid_fkey"
             columns: ["projects_uuid"]
+            isOneToOne: false
             referencedRelation: "projects"
             referencedColumns: ["uuid"]
           },
           {
             foreignKeyName: "settings_sections_uuid_fkey"
             columns: ["sections_uuid"]
+            isOneToOne: false
             referencedRelation: "sections"
             referencedColumns: ["uuid"]
           },
           {
             foreignKeyName: "settings_teams_uuid_fkey"
             columns: ["teams_uuid"]
+            isOneToOne: false
             referencedRelation: "teams"
             referencedColumns: ["uuid"]
           }
@@ -310,18 +328,21 @@ export interface Database {
           {
             foreignKeyName: "subscriptions_price_id_fkey"
             columns: ["price_id"]
+            isOneToOne: false
             referencedRelation: "prices"
             referencedColumns: ["id"]
           },
           {
             foreignKeyName: "subscriptions_teams_uuid_fkey"
             columns: ["teams_uuid"]
+            isOneToOne: false
             referencedRelation: "teams"
             referencedColumns: ["uuid"]
           },
           {
             foreignKeyName: "subscriptions_user_id_fkey"
             columns: ["user_id"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           }
@@ -350,18 +371,21 @@ export interface Database {
       }
       teams_users: {
         Row: {
+          created_at: string
           role: string | null
           teams_uuid: string | null
           user_uuid: string | null
           uuid: string
         }
         Insert: {
+          created_at?: string
           role?: string | null
           teams_uuid?: string | null
           user_uuid?: string | null
           uuid?: string
         }
         Update: {
+          created_at?: string
           role?: string | null
           teams_uuid?: string | null
           user_uuid?: string | null
@@ -371,12 +395,14 @@ export interface Database {
           {
             foreignKeyName: "teams_users_teams_uuid_fkey"
             columns: ["teams_uuid"]
+            isOneToOne: false
             referencedRelation: "teams"
             referencedColumns: ["uuid"]
           },
           {
             foreignKeyName: "teams_users_user_uuid_fkey"
             columns: ["user_uuid"]
+            isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
           }
@@ -405,6 +431,7 @@ export interface Database {
           {
             foreignKeyName: "tokens_teams_uuid_fkey"
             columns: ["teams_uuid"]
+            isOneToOne: false
             referencedRelation: "teams"
             referencedColumns: ["uuid"]
           }
@@ -436,6 +463,7 @@ export interface Database {
           {
             foreignKeyName: "users_id_fkey"
             columns: ["id"]
+            isOneToOne: true
             referencedRelation: "users"
             referencedColumns: ["id"]
           }
@@ -477,7 +505,6 @@ export interface Database {
         | "incomplete_expired"
         | "past_due"
         | "unpaid"
-        | "paused"
     }
     CompositeTypes: {
       [_ in never]: never

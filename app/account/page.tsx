@@ -77,7 +77,9 @@ async function AccountPage({ params }: { params: Page }) {
             alignItems="center"
           >
             <Box>You are not currently subscribed to any plan.</Box>
-            <Link href="/">Choose your plan</Link>
+            <Link 
+              href="/pricing"
+            >Choose your plan</Link>
           </Flex>}
       </Box>
 

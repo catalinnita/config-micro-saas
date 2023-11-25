@@ -14,9 +14,26 @@ export async function POST(req: Request) {
                     }
                 }
             );
-            const { email } = await req.json();
+            const { email, teamUuid } = await req.json();
             const res = await supabaseAdmin.auth.admin.inviteUserByEmail(email)
             
+            // add email as temp name
+            await supabaseAdmin
+              .from('users')
+              .update({ full_name: email })
+              .eq('id', res?.data?.user?.id)
+              .select()
+
+            // assign user to a team
+            await supabaseAdmin
+              .from('teams_users')
+              .insert([
+                { teams_uuid: teamUuid,
+                  user_uuid: res?.data?.user?.id, 
+                  role: 'member' },
+              ])
+              .select()
+
             return NextResponse.json({ res })
         } catch (err: any) {
           console.log(err);

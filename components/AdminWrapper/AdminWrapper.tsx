@@ -1,10 +1,10 @@
-import { headers } from "next/headers";
 import Navbar from "../Navbar";
 import { Container } from "@chakra-ui/react";
 import { navigationItems } from "@/config/navigation";
 import { getSubscription, getUser } from "@/data/supabase-server";
 import { redirect } from "next/navigation";
 import { Page } from "@/types/page";
+import { SubscriptionBanner} from "@/components/SubscriptionBanner";
 
 export function AdminWrapper<T extends { params: Page }>(
     Page: (props: T) => Promise<JSX.Element> | JSX.Element
@@ -16,11 +16,16 @@ export function AdminWrapper<T extends { params: Page }>(
             return redirect('/signin')
         }
         
-        if (!userDetails?.full_name) {
+        if (!userDetails?.full_name || userDetails?.full_name.includes("@")) {
             return redirect('/welcome')
         }
+        
+        const subscription = await getSubscription({
+            teams_uuid: userTeams?.teams_uuid || ''
+        })
 
-        const subscription = await getSubscription()
+        console.log({subscription, ut: userTeams?.teams_uuid})
+        
         props = {
             ...props,
             params: {
@@ -40,6 +45,10 @@ export function AdminWrapper<T extends { params: Page }>(
             >
                 <Navbar sections={navigationItems} />
                 <Container maxW="container.xl">
+                    <SubscriptionBanner 
+                        status={subscription?.status} 
+                        id={subscription?.id}
+                    />
                     <Page 
                         {...props} 
                     />

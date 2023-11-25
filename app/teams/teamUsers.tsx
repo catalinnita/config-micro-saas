@@ -16,14 +16,10 @@ export function TeamUsers({
     users
 }: TeamUsersProps) {
     const { userTeams } = useUser()
-    const { teamsUsers, rowsCount, deleteTeamsUsers, updateTeamsUsers } = useTeams({
+    const { deleteTeamsUsers, updateTeamsUsers } = useTeams({
         intialTeamsUsers: users,
         teamUuid
     })
-
-    console.log({
-        userTeams
-    });
 
     return (
         <TableContainer 
@@ -32,7 +28,6 @@ export function TeamUsers({
         >
             <Table>
                 <Tbody>
-
                     {users.map((user: any) => <UsersRow 
                         key={user.node.user_uuid}
                         user_uuid={user.node.user_uuid}

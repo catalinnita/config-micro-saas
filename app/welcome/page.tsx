@@ -1,6 +1,4 @@
 import { Container, Flex } from "@chakra-ui/react";
-
-import { Page } from "@/types/page";
 import { NameForm } from "./nameForm";
 import { getUser } from "@/data/supabase-server";
 import { redirect } from "next/navigation";
@@ -12,7 +10,7 @@ async function WelcomePage() {
         return redirect('/signin')
     }
 
-    if (userDetails?.full_name) {
+    if (userDetails?.full_name && !userDetails?.full_name.includes("@")) {
         return redirect('/dashboard')
     }
 
