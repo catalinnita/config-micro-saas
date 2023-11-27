@@ -23,9 +23,7 @@ export function AdminWrapper<T extends { params: Page }>(
         const subscription = await getSubscription({
             teams_uuid: userTeams?.teams_uuid || ''
         })
-
-        console.log({subscription, ut: userTeams?.teams_uuid})
-        
+                
         props = {
             ...props,
             params: {
@@ -46,8 +44,8 @@ export function AdminWrapper<T extends { params: Page }>(
                 <Navbar sections={navigationItems} />
                 <Container maxW="container.xl">
                     <SubscriptionBanner 
-                        status={subscription?.status} 
-                        id={subscription?.id}
+                        subscription={subscription}
+                        session={session}
                     />
                     <Page 
                         {...props} 

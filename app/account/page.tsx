@@ -13,14 +13,7 @@ import { Page } from '@/types/page';
 
 // TO DO: to split in pieces
 async function AccountPage({ params }: { params: Page }) {
-  const { session, userDetails, subscription } = params
-  const subscriptionPrice =
-    subscription &&
-    new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: subscription?.prices?.currency!,
-      minimumFractionDigits: 0
-    }).format((subscription?.prices?.unit_amount || 0) / 100);
+  const { session, userDetails } = params
 
   const updateName = async (formData: FormData) => {
     'use server';
@@ -62,26 +55,7 @@ async function AccountPage({ params }: { params: Page }) {
       >
         Account
       </Heading>
-      <Box
-        mb={4}
-      >
-        {subscription ? 
-          <Flex
-            alignItems="center"
-          >
-            <Box>You are currently on the {subscription?.prices?.products?.name} plan. {subscriptionPrice}/{subscription?.prices?.interval}</Box>
-            <ManageSubscriptionButton session={session} />
-          </Flex>
-          : 
-          <Flex
-            alignItems="center"
-          >
-            <Box>You are not currently subscribed to any plan.</Box>
-            <Link 
-              href="/pricing"
-            >Choose your plan</Link>
-          </Flex>}
-      </Box>
+      
 
       <Flex
         flexDirection="column" 

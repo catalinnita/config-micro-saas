@@ -20,8 +20,6 @@ export async function POST(req: Request) {
         .select('*')
         .eq('name', name);
         
-        console.log({res})
-
         return NextResponse.json({ res })
       } catch (err: any) {
         console.log(err);

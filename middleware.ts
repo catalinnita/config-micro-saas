@@ -11,8 +11,6 @@ export async function middleware(req: NextRequest) {
   const pathname = url.pathname;
   const requestHeaders = new Headers(req.headers);
 
-  // console.log(req.headers)
-
   requestHeaders.set('x-url', req.url);
   requestHeaders.set('x-origin', origin);
   requestHeaders.set('x-pathname', pathname);
