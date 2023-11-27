@@ -23,6 +23,18 @@ export function AdminWrapper<T extends { params: Page }>(
         const subscription = await getSubscription({
             teams_uuid: userTeams?.teams_uuid || ''
         })
+
+        if (!subscription && userTeams?.role === 'admin') {
+            return redirect('/pricing')
+        }
+        
+        if (!subscription && userTeams?.role !== 'admin') {
+            return redirect('/payment-required')
+        }
+
+        if (subscription && subscription.status !== 'active' && subscription.status !== 'trialing') { 
+            return redirect('/payment-required')
+        }
                 
         props = {
             ...props,
