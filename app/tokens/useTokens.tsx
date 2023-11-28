@@ -1,9 +1,9 @@
 import { addTokenMutation } from "@/data/queries/addToken";
 import { deleteTokenMutation } from "@/data/queries/deleteToken";
 import { tokensQuery } from "@/data/queries/tokens";
+import { postData } from "@/utils/helpers";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { useState } from "react";
-
 
 type useTokensProps = {
     initialTokens: string[]
@@ -16,7 +16,6 @@ export function useTokens({
 }: useTokensProps) {
     const [ tokens, setTokens ] = useState(initialTokens);
     const rowsCount = tokens.length
-    const [ addToken ] = useMutation(addTokenMutation);
     const [ deleteToken ] = useMutation(deleteTokenMutation);
 
     const [ refetchTokens ] = useLazyQuery(tokensQuery, {
@@ -32,22 +31,16 @@ export function useTokens({
             setTokens(data.tokensCollection.edges)
         }
     })
-    const generateToken = () => {
-        return Array.from(Array(6).keys()).reduce((acc, _) => acc = `${acc}${Math.random().toString(36)}`, '')
-    }
-    const createToken = ({teamsUuid} : {teamsUuid: string}) => {
-        addToken({
-            variables: {
-                tokensInsertInput: {
-                    token: generateToken(),
-                    teams_uuid: teamsUuid
-                }
-            }
-        }).then(res => {
+
+    const createToken = () => {
+        fetch("/api/create-token", {
+            method: 'post'
+        }).then((res) => {
+            console.log({res})
             refetchTokens()
-        }).catch(err => {
-            console.error(err)
-        })    
+        })
+
+        
     }
 
     const removeToken = ({ uuid }: {uuid: string}) => {

@@ -14,7 +14,7 @@ export function TokensList({
     initialTokens,
     teams_uuid
 }: TokensListProps) {
-    const {tokens, rowsCount, addToken, deleteToken} = useTokens({
+    const {tokens, addToken, deleteToken} = useTokens({
         initialTokens,
         teamUuid: teams_uuid
     })
@@ -32,7 +32,9 @@ export function TokensList({
                         <Td p={3}>{token.node.token}</Td>
                         <Td width="1" py={0} px={2}>
                             <Button 
-                                onClick={() => { deleteToken({ uuid: token.node.uuid }) }}
+                                onClick={() => { deleteToken({ 
+                                    uuid: token.node.uuid 
+                                }) }}
                                 variant="text" 
                                 p={3} 
                                 h="auto"
@@ -51,9 +53,7 @@ export function TokensList({
         <Box>
             <CreateToken 
                 createTokenCallback={() => {
-                    addToken({
-                        teamsUuid: teams_uuid
-                    })
+                    addToken()
                 }}
             />
         </Box>

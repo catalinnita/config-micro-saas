@@ -154,3 +154,29 @@ export const getTeamsUsersInfo = async () => {
     .from('projects')
     .select('*');
 }
+
+export const saveToken = async ({
+  teamsUuid,
+  token
+}: {
+  teamsUuid: string,
+  token: string,
+}) => {
+  const supabase = createServerSupabaseClient();
+  const { error, data } = await supabase
+    .from('tokens')
+    .insert([{ 
+      teams_uuid: teamsUuid, 
+      token: token,
+    }]);
+
+  console.log({
+    error,
+    data
+  })
+
+  if (error) {
+    console.log(error.message);
+  }
+  return [];
+}

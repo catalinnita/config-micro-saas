@@ -1,4 +1,3 @@
-import { getUser } from '@/data/supabase-server';
 import { AdminWrapper } from '@/components/AdminWrapper';
 import { getTokensById } from '@/data/apollo-server';
 import { GridWrapper } from '@/components/GridWrapper';

@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server';
 
 export async function POST(req: Request) {
   if (req.method === 'POST') {
+    
     try {
       const { name } = await req.json()
       const supabaseAdmin = createClient(
