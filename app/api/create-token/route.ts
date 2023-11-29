@@ -14,9 +14,9 @@ export async function POST(req: Request) {
         if (!session || !userTeams?.teams_uuid) {
             throw new Error("You are not authorised to access this endpoint.")
         }
-
+        const generatedToken = generateToken()
         const token: string = await new Promise((resolve, reject) => { 
-            bcrypt.hash(generateToken(), 10, async function(err?: Error, token?: string) {
+            bcrypt.hash(generatedToken, 10, async function(err?: Error, token?: string) {
                 if (!token) {
                    reject("You are not authorised to access this endpoint.")
                 }
@@ -25,12 +25,14 @@ export async function POST(req: Request) {
             });
         })
 
-        const saveTokenResponse = await saveToken({
+        await saveToken({
             token,
             teamsUuid: userTeams?.teams_uuid
         })
 
-        return new NextResponse(JSON.stringify({}), { 
+        return new NextResponse(JSON.stringify({
+            generatedToken
+        }), { 
             status: 200 
         });
     } catch(err: any) {

@@ -18,7 +18,6 @@ export const tokensQuery = gql`
                 node {
                     uuid,
                     teams_uuid,
-                    token,
                 }
             }
         }

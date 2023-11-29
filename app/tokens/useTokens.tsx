@@ -1,9 +1,7 @@
-import { addTokenMutation } from "@/data/queries/addToken";
 import { deleteTokenMutation } from "@/data/queries/deleteToken";
 import { tokensQuery } from "@/data/queries/tokens";
-import { postData } from "@/utils/helpers";
 import { useLazyQuery, useMutation } from "@apollo/client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type useTokensProps = {
     initialTokens: string[]
@@ -14,9 +12,21 @@ export function useTokens({
     initialTokens,
     teamUuid
 }: useTokensProps) {
+    const [ viewableToken, setViewableToken ] = useState('');
     const [ tokens, setTokens ] = useState(initialTokens);
+    const [ parsedTokens, setParsedTokens ] = useState([] as any)
     const rowsCount = tokens.length
     const [ deleteToken ] = useMutation(deleteTokenMutation);
+    const fakeToken = '******** '.repeat(5)
+
+    useEffect(() => {
+        setParsedTokens(tokens.map((token: any, index) => {
+            token.node.token = viewableToken && index === tokens.length - 1 ?
+                        viewableToken : fakeToken
+    
+            return token
+        }))
+    }, [tokens])
 
     const [ refetchTokens ] = useLazyQuery(tokensQuery, {
         ssr: false,
@@ -35,12 +45,13 @@ export function useTokens({
     const createToken = () => {
         fetch("/api/create-token", {
             method: 'post'
-        }).then((res) => {
-            console.log({res})
+        }).then((res: any) => {
+            return res.json()
+        }).then((res: any) => {
             refetchTokens()
+            const { generatedToken } = res;
+            setViewableToken(generatedToken)
         })
-
-        
     }
 
     const removeToken = ({ uuid }: {uuid: string}) => {
@@ -61,7 +72,9 @@ export function useTokens({
         tokens,
         addToken: createToken,
         deleteToken: removeToken,
-        rowsCount
+        rowsCount,
+        viewableToken,
+        parsedTokens
     }
 
 }
