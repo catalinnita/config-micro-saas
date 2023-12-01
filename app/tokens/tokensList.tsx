@@ -4,7 +4,6 @@ import { DeleteIcon } from "@/components/DeleteIcon/deleteIcon"
 import { CreateToken } from "./createToken"
 import { useTokens } from "./useTokens"
 import { Box, Button, Table, TableContainer, Tbody, Td, Tr } from "@chakra-ui/react"
-import { useEffect, useState } from "react"
 
 type TokensListProps = {
     initialTokens: any[],
