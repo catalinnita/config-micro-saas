@@ -1,6 +1,5 @@
 'use client'
 
-import { getUser } from "@/data/supabase-server";
 import { createContext, useContext, useEffect, useState } from "react";
 import { useSupabase } from "./supabase-provider";
 

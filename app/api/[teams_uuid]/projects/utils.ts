@@ -1,6 +1,6 @@
 // replace password with api-key
 import bcrypt from "bcrypt";
-import jwt from 'jsonwebtoken';
+import jwt, { Secret } from 'jsonwebtoken';
 import { NextApiResponse } from 'next';
 import { createClient } from '@supabase/supabase-js';
 
@@ -26,9 +26,8 @@ export async function verifyApiKey({key, teams_uuid} : {key: string, teams_uuid:
     if(!data) {
         throw new Error("invalid api-key")
     }
-
     const exists = data.some(({ token }) => {
-        return bcrypt.compareSync(key.toString().substring(0,77), token)
+        return bcrypt.compareSync(key.toString(), token)
     })
         
     if (!exists) {
@@ -42,7 +41,7 @@ export async function verifyApiKey({key, teams_uuid} : {key: string, teams_uuid:
 export function generateAccessToken({ teams_uuid } : { teams_uuid: string }) {
   return jwt.sign(
     { teams_uuid },
-    process.env.SECRET_TOKEN,
+    process.env.SECRET_TOKEN as Secret,
     {
       expiresIn: '1h',
     }
@@ -52,7 +51,7 @@ export function generateAccessToken({ teams_uuid } : { teams_uuid: string }) {
 export function generateRefreshToken({ teams_uuid } : { teams_uuid: string }) {
   return jwt.sign(
     { teams_uuid },
-    process.env.SECRET_RTOKEN,
+    process.env.SECRET_RTOKEN as Secret,
     {
       expiresIn: '30d',
     }
@@ -74,8 +73,8 @@ export async function addToList({ teams_uuid, refresher } : { teams_uuid: string
 
 export async function tokenRefresh({refreshtoken, res}: {refreshtoken: string, res: NextApiResponse}) {
     try {
-        const decoded = jwt.verify(refreshtoken, process.env.SECRET_RTOKEN);
-
+        const decoded = jwt.verify(refreshtoken, process.env.SECRET_RTOKEN as Secret) as {teams_uuid: string};
+        
         if (decoded && decoded.teams_uuid) {
             const { data }  = await supabaseAdmin
                 .from('refresh_tokens')
@@ -123,7 +122,7 @@ export async function tokenRefresh({refreshtoken, res}: {refreshtoken: string, r
 
 export async function verifyToken({token}: {token: string}) {
   try {
-    const decoded = jwt.verify(token, process.env.SECRET_TOKEN);
+    const decoded = jwt.verify(token, process.env.SECRET_TOKEN as Secret);
     return decoded;
   } catch (err) {
     throw new Error("token is invalid")
