@@ -1,16 +1,22 @@
 import ManageSubscriptionButton from "@/app/account/ManageSubscriptionButton";
 import { Box, Flex } from "@chakra-ui/react";
 import Link from "next/link";
+import { Session } from '@supabase/supabase-js';
+import { SubscriptionWithProduct } from "@/types/subscription";
 
 type SubscriptionBannerProps = {
-    subscription: any,
-    session: any
+    subscription: SubscriptionWithProduct | null,
+    session: Session
 }
 
 export function SubscriptionBanner({
     subscription,
     session
 }: SubscriptionBannerProps) {
+    if (!subscription) {
+        return null
+    }
+
     const canManage = subscription.user_id === session.user.id
   
     const subscriptionPrice =

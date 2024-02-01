@@ -1,19 +1,22 @@
+import type { Styles } from "@chakra-ui/theme-tools"
 import { Box, PropsOf } from "@chakra-ui/react"
 import { MouseEvent, useEffect, useRef, useState } from "react"
 
 type EditableFieldProps = {
-    children: string
     canEdit?: boolean
+    children: string
     editCallback: (fieldValue: string) => void
     focus?: boolean
-    style?: any
+    style?: Styles
 } & PropsOf<typeof Box>
+
+type GetCaretProps = {
+    el: HTMLDivElement
+}
 
 function getCaret({
     el
-}: {
-    el: any
-}) {
+}: GetCaretProps) {
     let caretAt = 0;
     const sel = window.getSelection();
     
@@ -30,10 +33,15 @@ function getCaret({
     return caretAt;   
   }
   
+type SetCaretProps = {
+    el: HTMLDivElement
+    offset?: number
+}
+
 function setCaret({
     el, 
-    offset=0
-}: {el: any, offset?: number}) {
+    offset = 0
+}: SetCaretProps) {
     let sel = window.getSelection();
     let range = document.createRange();
 
@@ -47,10 +55,15 @@ function setCaret({
     sel.addRange(range);
   }
 
+type SelectAllProps = {
+    el: HTMLDivElement
+    offset?: number
+}
+
 function selectAll({
     el, 
-    offset=0
-}: {el: any, offset?: number}) {
+    offset = 0
+}: SelectAllProps) {
     let sel = window.getSelection();
     let range = document.createRange();
 
@@ -72,7 +85,7 @@ export function EditableField({
     editCallback,
     ...rest
 }: EditableFieldProps) {
-    const contentRef = useRef<HTMLDivElement | null>(null);
+    const contentRef = useRef<HTMLDivElement>(null);
     const caretPos = useRef<number>(0);
     const [fieldValue, setFieldValue] = useState(children)
     const [contentEditable, setContentEditable] = useState(false)
@@ -95,10 +108,12 @@ export function EditableField({
     }, [focus])
 
     useEffect(() => {
-        setCaret({
-            el: contentRef.current, 
-            offset: caretPos.current
-        });
+        if (contentRef.current) {
+            setCaret({
+                el: contentRef.current, 
+                offset: caretPos.current
+            });
+        }
         contentRef.current && contentRef.current.focus()
       }, [fieldValue, contentEditable]);
 
@@ -133,14 +148,18 @@ export function EditableField({
             contentEditable={contentEditable}
             onClick={enableEdit}
             onFocus={() => {
-                selectAll({
-                    el: contentRef.current
-                })}
+                if (contentRef.current) {
+                    selectAll({
+                        el: contentRef.current
+                    })}
+                }
             }
             onInput={(e: React.ChangeEvent<HTMLInputElement>) => {
-                caretPos.current = getCaret({
-                    el: contentRef.current
-                });
+                if (contentRef.current) {
+                    caretPos.current = getCaret({
+                        el: contentRef.current
+                    });
+                }
                 setFieldValue(e.target.innerText)
             }}
             onBlur={() => {

@@ -46,6 +46,7 @@ export function AdminWrapper<T extends { params: Page }>(
                 subscription
             }
         }
+        
         return (
             <Container 
                 p={0}

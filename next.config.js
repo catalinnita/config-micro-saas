@@ -5,10 +5,6 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  experimental: {
-    appDir: true,
-    serverActions: true
-  }
 };
 
 module.exports = withBundleAnalyzer(nextConfig);

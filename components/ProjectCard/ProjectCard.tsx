@@ -6,13 +6,20 @@ import { EditableField } from "../EditableField"
 import { Box, Flex, IconButton } from "@chakra-ui/react"
 import Link from "next/link"
 
+type UpdateProjectProps = {
+    uuid: string,
+    fields: {
+        name: string,
+    }
+}
+
 type ProjectCardProps = {
     focus?: boolean,
     color: string
     uuid: string,
     name: string
     settingsCount: number
-    updateProject: any
+    updateProject: (props: UpdateProjectProps) => void
     deleteProject: () => void
 }
 type hexToCssHslProps = {

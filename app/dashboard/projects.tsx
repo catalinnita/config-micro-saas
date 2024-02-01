@@ -12,9 +12,13 @@ const calculateSettingsCount = (project: any): number => {
     }, 0)
 }
 
+type ProjectsProps = {
+    initialProjects: Project[]
+}
+
 export function Projects({
     initialProjects
-}: any) {
+}: ProjectsProps) {
     const { userTeams } = useUser()
 
     const { 
@@ -44,7 +48,7 @@ export function Projects({
             gap={6}
             pb={6}
         >
-            {projectsList?.projectsCollection?.edges?.map((project: any) => 
+            {projectsList?.projectsCollection?.edges?.map((project: Project) => 
                     <ProjectCard 
                         focus={project.node.uuid === toEdit}
                         key={project.node.uuid}
