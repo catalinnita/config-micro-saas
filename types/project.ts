@@ -43,4 +43,6 @@ type Project = {
         section: ProjectSection,
         settings: ProjectSetting[],
     }
+
+    node: any
 }

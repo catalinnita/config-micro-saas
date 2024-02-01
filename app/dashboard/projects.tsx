@@ -13,7 +13,8 @@ const calculateSettingsCount = (project: any): number => {
 }
 
 type ProjectsProps = {
-    initialProjects: Project[]
+    // initialProjects: Project[]
+    initialProjects: any
 }
 
 export function Projects({

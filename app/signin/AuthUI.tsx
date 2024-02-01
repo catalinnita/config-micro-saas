@@ -9,7 +9,7 @@ import { ThemeSupa } from '@supabase/auth-ui-shared';
 export default function AuthUI() {
   const { supabase } = useSupabase();
   console.log({
-    url: getURL()
+    supabase
   })
   return (
     <div className="flex flex-col space-y-4">
